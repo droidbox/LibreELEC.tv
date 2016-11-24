@@ -74,9 +74,9 @@ PKG_IS_ADDON="no"
 PKG_AUTORECONF="no"
 
 if [ "$TARGET_KERNEL_ARCH" = "arm64" -a "$TARGET_ARCH" = "arm" ]; then
-  PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET gcc-linaro-aarch64-elf:host"
-  export PATH=$ROOT/$TOOLCHAIN/lib/gcc-linaro-aarch64-elf/bin/:$PATH
-  TARGET_PREFIX=aarch64-elf-
+  PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET gcc-linaro-aarch64-linux-gnu:host"
+  export PATH=$ROOT/$TOOLCHAIN/lib/gcc-linaro-aarch64-linux-gnu/bin/:$PATH
+  TARGET_PREFIX=aarch64-linux-gnu-
   PKG_MAKE_OPTS_HOST="ARCH=$TARGET_ARCH headers_check"
 else
   PKG_MAKE_OPTS_HOST="ARCH=$TARGET_KERNEL_ARCH headers_check"
@@ -154,7 +154,7 @@ post_patch() {
 }
 
 makeinstall_host() {
-  if [ $TARGET_KERNEL_ARCH = "arm64" ] && [ $TARGET_ARCH == "arm"  ]; then
+  if [ "$TARGET_KERNEL_ARCH" = "arm64" -a "$TARGET_ARCH" = "arm" ]; then
     make ARCH=$TARGET_ARCH INSTALL_HDR_PATH=dest headers_install
   else
     make ARCH=$TARGET_KERNEL_ARCH INSTALL_HDR_PATH=dest headers_install
@@ -198,6 +198,13 @@ make_target() {
     rm -rf $ROOT/$BUILD/initramfs
     $SCRIPTS/install initramfs
   )
+
+  if [ "$BUILD_ANDROID_BOOTIMG" = "yes" ]; then
+    if [ "$TARGET_KERNEL_ARCH" = "arm64" -a "$TARGET_ARCH" = "arm" ]; then
+      PATH=$ROOT/$TOOLCHAIN/lib/gcc-linaro-aarch64-linux-gnu/bin/:$PATH
+      TARGET_PREFIX=aarch64-linux-gnu-
+    fi
+  fi
 
   if [ "$BOOTLOADER" = "u-boot" -a -n "$KERNEL_UBOOT_EXTRA_TARGET" ]; then
     for extra_target in "$KERNEL_UBOOT_EXTRA_TARGET"; do
