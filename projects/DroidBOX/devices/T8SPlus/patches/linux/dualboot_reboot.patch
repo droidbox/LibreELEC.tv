@@ -1,0 +1,28 @@
+diff --git a/arch/arm/plat-meson/power.c b/arch/arm/plat-meson/power.c
+index fafce50..390dfff 100644
+--- a/arch/arm/plat-meson/power.c
++++ b/arch/arm/plat-meson/power.c
+@@ -61,6 +61,10 @@ void meson_common_restart(char mode,const char *cmd)
+             reboot_reason = MESON_LOCK_REBOOT;
+         else if (strcmp(cmd, "usb_burner_reboot") == 0)
+             reboot_reason = MESON_USB_BURNER_REBOOT;
++        else if (strcmp(cmd, "android") == 0)
++            reboot_reason = MESON_UBOOT_ANDROID;
++        else if (strcmp(cmd, "openelec") == 0)
++            reboot_reason = MESON_UBOOT_OPENELEC;
+         else if (strcmp(cmd, "uboot_suspend") == 0)
+             reboot_reason = MESON_UBOOT_SUSPEND;
+ 	}
+diff --git a/include/uapi/linux/reboot.h b/include/uapi/linux/reboot.h
+index cbd99de..645b813 100755
+--- a/include/uapi/linux/reboot.h
++++ b/include/uapi/linux/reboot.h
+@@ -61,6 +61,8 @@
+ #define	MESON_USB_BURNER_REBOOT			0x09090909
+ #define MESON_UBOOT_SUSPEND				0x0b0b0b0b
+ #define	MESON_REBOOT_CLEAR				0xdeaddead
++#define MESON_UBOOT_OPENELEC             0x0c0c0c0c
++#define MESON_UBOOT_ANDROID             0x0d0d0d0d
+ #endif /* CONFIG_PLAT_MESON */
+ 
+ #endif /* _UAPI_LINUX_REBOOT_H */

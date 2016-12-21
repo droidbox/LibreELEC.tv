@@ -1,0 +1,88 @@
+diff --git a/language/English/strings.po b/language/English/strings.po
+index d845859..6dfc8da 100644
+--- a/language/English/strings.po
++++ b/language/English/strings.po
+@@ -837,3 +837,15 @@ msgstr ""
+ msgctxt "#32391"
+ msgid "Enable LCD Driver Support"
+ msgstr ""
++
++msgctxt "#60006"
++msgid "Switch System"
++msgstr ""
++
++msgctxt "#60007"
++msgid "Reboot to Android"
++msgstr ""
++
++msgctxt "#60008"
++msgid "Reboot to Android"
++msgstr ""
+diff --git a/language/Russian/strings.po b/language/Russian/strings.po
+index a3feefb..f12f2ee 100644
+--- a/language/Russian/strings.po
++++ b/language/Russian/strings.po
+@@ -743,3 +743,15 @@ msgstr "Дополнение настройки ещё не готово. Пов
+ msgctxt "#32391"
+ msgid "Enable LCD Driver Support"
+ msgstr "Включить поддержку драйвера ЖК-экрана"
++
++msgctxt "#60006"
++msgid "Switch System"
++msgstr "Смена Системы"
++
++msgctxt "#60007"
++msgid "Reboot to Android"
++msgstr "Перезапустится в Android"
++
++msgctxt "#60008"
++msgid "Reboot to Android"
++msgstr "Перезапустится в Android"
+diff --git a/src/resources/lib/modules/system.py b/src/resources/lib/modules/system.py
+index a0f2b64..2b53cbc 100644
+--- a/src/resources/lib/modules/system.py
++++ b/src/resources/lib/modules/system.py
+@@ -209,6 +209,20 @@ class system:
+                             },
+                         },
+                     },
++                'switch': {
++                    'order': 9,
++                    'name': 60006,
++                    'settings': {
++                        'switch_system': {
++                            'name': 60007,
++                            'value': '0',
++                            'action': 'switch_system',
++                            'type': 'button',
++                            'InfoText': 60008,
++                            'order': 1,
++                            },
++                        },
++                    },
+                 }
+ 
+             self.keyboard_layouts = False
+@@ -637,6 +651,19 @@ class system:
+             self.oe.set_busy(0)
+             self.oe.dbg_log('system::reset_oe', 'ERROR: (' + repr(e) + ')', 4)
+ 
++    def switch_system(self, listItem=None):
++        try:
++            self.oe.dbg_log('system::switch_system', 'enter_function', 0)
++            self.oe.set_busy(1)
++            self.oe.execute('/usr/sbin/switch')
++            self.oe.winOeMain.close()
++            time.sleep(1)
++            self.oe.set_busy(0)
++            self.oe.dbg_log('system::switch_system', 'exit_function', 0)
++        except Exception, e:
++            self.oe.set_busy(0)
++            self.oe.dbg_log('system::switch_system', 'ERROR: (' + repr(e) + ')', 4)
++
+     def ask_sure_reset(self, part):
+         try:
+             self.oe.dbg_log('system::ask_sure_reset', 'enter_function', 0)
+-- 
+1.7.10.4
+

@@ -1,0 +1,7 @@
+<keymap>
+    <global>
+	<keyboard>
+	    <key id="61515">audionextlanguage</key>
+	</keyboard>
+    </global>
+</keymap>
