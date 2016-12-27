@@ -35,6 +35,10 @@ pre_configure_target() {
   CFLAGS="$CFLAGS -Wno-error=misleading-indentation"
 }
 
+pre_configure_target() {
+  CFLAGS="$CFLAGS -Wno-error=misleading-indentation"
+}
+
 makeinstall_target() {
   : nothing to do
 }
