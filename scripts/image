@@ -236,7 +236,7 @@ if [ "$TARGET_KERNEL_ARCH" = "arm64" -a "$TARGET_ARCH" = "arm"  ]; then
   export PATH=$ROOT/$TOOLCHAIN/lib/gcc-linaro-aarch64-elf/bin/:$PATH
   STRIP=aarch64-elf-strip
 fi
-for MOD in `find $INSTALL/lib/modules/ -type f -name *.ko`; do
+for MOD in `find $INSTALL/usr/lib/modules/ -type f -name *.ko`; do
   $STRIP --strip-debug $MOD
 done
 

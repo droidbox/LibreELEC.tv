@@ -14,7 +14,7 @@ diff -Naur a/Makefile b/Makefile
  CWD    = $(shell pwd -P)
  KVER  ?= $(shell uname -r)
 -KDIR  = /lib/modules/$(KVER)
-+KDIR  ?= /lib/modules/$(KVER)
++KDIR  ?= /usr/lib/modules/$(KVER)
  obj-m += $(MODNAME).o
  
  #EXTRA_CFLAGS += -Werror
