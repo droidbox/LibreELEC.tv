@@ -39,6 +39,6 @@ make_host() {
 }
 
 makeinstall_host() {
-  mkdir -p ${ROOT}/${TOOLCHAIN}/usr/lib/gcc-linaro-aarch64-linux-gnu/
-  cp -a * ${ROOT}/${TOOLCHAIN}/usr/lib/gcc-linaro-aarch64-linux-gnu
+  mkdir -p ${ROOT}/${TOOLCHAIN}/lib/gcc-linaro-aarch64-linux-gnu/
+  cp -a * ${ROOT}/${TOOLCHAIN}/lib/gcc-linaro-aarch64-linux-gnu
 }
