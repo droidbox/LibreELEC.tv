@@ -1,0 +1,87 @@
+diff --git a/language/English/strings.po b/language/English/strings.po
+index e2d9fff..4f98ec4 100644
+--- a/language/English/strings.po
++++ b/language/English/strings.po
+@@ -861,3 +861,15 @@ msgstr ""
+ msgctxt "#60008"
+ msgid "Reboot to Android"
+ msgstr ""
++
++msgctxt "#60009"
++msgid "Format your internal HDD"
++msgstr ""
++
++msgctxt "#60010"
++msgid "[COLOR FF00FF00]Format Internal HDD[/COLOR]\nThat will format interlan HDD - all information on you hard disk drive will be deleted."
++msgstr ""
++
++msgctxt "#60011"
++msgid "Your internal HDD will be formatted. Please remove any other devices attached to a USB port.\nDo You want to proceed?"
++msgstr ""
+diff --git a/src/resources/lib/modules/system.py b/src/resources/lib/modules/system.py
+index c44743a..b48d2c6 100644
+--- a/src/resources/lib/modules/system.py
++++ b/src/resources/lib/modules/system.py
+@@ -201,6 +201,20 @@ class system:
+                             },
+                         },
+                     },
++                'formathdd': {
++                    'order': 9,
++                    'name': 60009,
++                    'settings': {
++                        'format_hdd': {
++                            'name': 60009,
++                            'value': '0',
++                            'action': 'format_hdd',
++                            'type': 'button',
++                            'InfoText': 60010,
++                            'order': 1,
++                            },
++                        },
++                    },
+                 'cacheclear': {
+                     'order': 9,
+                     'name': 60003,
+@@ -640,6 +654,20 @@ class system:
+             self.oe.set_busy(0)
+             self.oe.dbg_log('system::reset_xbmc', 'ERROR: (' + repr(e) + ')', 4)
+ 
++    def format_hdd(self, listItem=None):
++        try:
++            self.oe.dbg_log('system::format_hdd', 'enter_function', 0)
++            if self.ask_sure_format('XBMC') == 1:
++                self.oe.set_busy(1)
++                self.oe.execute('/usr/sbin/format_hdd.sh')
++                self.oe.winOeMain.close()
++                time.sleep(1)
++            self.oe.set_busy(0)
++            self.oe.dbg_log('system::format_hdd', 'exit_function', 0)
++        except Exception, e:
++            self.oe.set_busy(0)
++            self.oe.dbg_log('system::format_hdd', 'ERROR: (' + repr(e) + ')', 4)
++
+     def cache_clear(self, listItem=None):
+         try:
+             self.oe.dbg_log('system::cache_clear', 'enter_function', 0)
+@@ -666,6 +694,20 @@ class system:
+             self.oe.set_busy(0)
+             self.oe.dbg_log('system::switch_system', 'ERROR: (' + repr(e) + ')', 4)
+ 
++    def ask_sure_format(self, part):
++        try:
++            self.oe.dbg_log('system::ask_sure_format', 'enter_function', 0)
++            xbmcDialog = xbmcgui.Dialog()
++            answer = xbmcDialog.yesno(part + ' ', self.oe._(60010).encode('utf-8'), self.oe._(60011).encode('utf-8'))
++            if answer == 1:
++                return 1
++            else:
++                return 0
++            self.oe.dbg_log('system::ask_sure_format', 'exit_function', 0)
++        except Exception, e:
++            self.oe.set_busy(0)
++            self.oe.dbg_log('system::ask_sure_format', 'ERROR: (' + repr(e) + ')', 4)
++
+     def ask_sure_reset(self, part):
+         try:
+             self.oe.dbg_log('system::ask_sure_reset', 'enter_function', 0)
