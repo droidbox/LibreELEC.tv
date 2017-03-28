@@ -1,0 +1,78 @@
+From a6909217758305643361031cffc703ccd8ad5896 Mon Sep 17 00:00:00 2001
+From: alex <surkov.alex@gmail.com>
+Date: Wed, 22 Mar 2017 10:44:28 +0300
+Subject: [PATCH 6/8] add reboot to android function
+
+---
+ language/English/strings.po         | 12 ++++++++++++
+ src/resources/lib/modules/system.py | 27 +++++++++++++++++++++++++++
+ 2 files changed, 39 insertions(+)
+
+diff --git a/language/English/strings.po b/language/English/strings.po
+index cd9fe97..99cd57a 100644
+--- a/language/English/strings.po
++++ b/language/English/strings.po
+@@ -807,3 +807,15 @@ msgstr ""
+ msgctxt "#32392"
+ msgid "Enable Lirc"
+ msgstr ""
++
++msgctxt "#60006"
++msgid "Switch System"
++msgstr ""
++
++msgctxt "#60007"
++msgid "Reboot to Android"
++msgstr ""
++
++msgctxt "#60008"
++msgid "Reboot to Android"
++msgstr ""
+diff --git a/src/resources/lib/modules/system.py b/src/resources/lib/modules/system.py
+index 9bc5c72..5f55f0a 100644
+--- a/src/resources/lib/modules/system.py
++++ b/src/resources/lib/modules/system.py
+@@ -290,6 +290,20 @@ class system:
+                             },
+                         },
+                     },
++                'switch': {
++                    'order': 10,
++                    'name': 60006,
++                    'settings': {
++                        'switch_system': {
++                            'name': 60007,
++                            'value': '0',
++                            'action': 'switch_system',
++                            'type': 'button',
++                            'InfoText': 60008,
++                            'order': 1,
++                            },
++                        },
++                    },
+                 }
+ 
+             self.keyboard_layouts = False
+@@ -854,6 +868,19 @@ class system:
+             self.oe.set_busy(0)
+             self.oe.dbg_log('system::reset_oe', 'ERROR: (' + repr(e) + ')', 4)
+ 
++    def switch_system(self, listItem=None):
++        try:
++            self.oe.dbg_log('system::switch_system', 'enter_function', 0)
++            self.oe.set_busy(1)
++            self.oe.execute('/usr/sbin/switch')
++            self.oe.winOeMain.close()
++            time.sleep(1)
++            self.oe.set_busy(0)
++            self.oe.dbg_log('system::switch_system', 'exit_function', 0)
++        except Exception, e:
++            self.oe.set_busy(0)
++            self.oe.dbg_log('system::switch_system', 'ERROR: (' + repr(e) + ')', 4)
++
+     def ask_sure_reset(self, part):
+         try:
+             self.oe.dbg_log('system::ask_sure_reset', 'enter_function', 0)
+-- 
+1.9.1
+
