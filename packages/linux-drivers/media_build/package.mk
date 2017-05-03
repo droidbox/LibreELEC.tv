@@ -17,7 +17,7 @@
 ################################################################################
 
 PKG_NAME="media_build"
-PKG_VERSION="2017-01-22"
+PKG_VERSION="2017-04-17-rpi"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"
 PKG_SITE="https://github.com/crazycat69/linux_media"
@@ -31,12 +31,6 @@ PKG_LONGDESC="DVB drivers that replace the version shipped with the kernel"
 PKG_IS_ADDON="no"
 PKG_AUTORECONF="no"
 
-if [ "$TARGET_KERNEL_ARCH" = "arm64" -a "$TARGET_ARCH" = "arm" ]; then
-  PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET gcc-linaro-aarch64-linux-gnu:host"
-  export PATH=$ROOT/$TOOLCHAIN/lib/gcc-linaro-aarch64-linux-gnu/bin/:$PATH
-  TARGET_PREFIX=aarch64-linux-gnu-
-fi
-
 pre_make_target() {
   export KERNEL_VER=$(get_module_dir)
   export LDFLAGS=""
@@ -49,10 +43,6 @@ make_target() {
   if [ "$PROJECT" = Generic ] || [ "$PROJECT" = Virtual ]; then
     if [ -f $PKG_DIR/config/generic.config ]; then
       cp $PKG_DIR/config/generic.config v4l/.config
-    fi
-  elif [ "$PROJECT" != "Amlogic" ]; then
-    if [ -f $PKG_DIR/config/usb.config ]; then
-      cp $PKG_DIR/config/usb.config v4l/.config
     fi
   fi
 
@@ -72,13 +62,6 @@ make_target() {
     cp -a "$(kernel_path)/drivers/media/v4l2-core/videobuf-res.c" "linux/drivers/media/v4l2-core/"
     cp -a "$(kernel_path)/include/media/videobuf-res.h" "linux/include/media/"
     echo "obj-m += videobuf-res.o" >> "linux/drivers/media/v4l2-core/Makefile"
-
-    # Use meson-ir module from kernel tree, patch it and force to be built
-    if [ -e "$(kernel_path)/drivers/media/rc/meson-ir.c" ]; then
-      cp -a "$(kernel_path)/drivers/media/rc/meson-ir.c" "linux/drivers/media/rc/"
-      sed -i 's,allowed_protos,allowed_protocols,g' "linux/drivers/media/rc/meson-ir.c"
-      echo "obj-m += meson-ir.o" >> "linux/drivers/media/rc/Makefile"
-    fi
 
   fi
 
