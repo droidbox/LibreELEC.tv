@@ -1,0 +1,57 @@
+diff --git a/xbmc/Application.cpp b/xbmc/Application.cpp
+index b8ff91b..ffd2559 100644
+--- a/xbmc/Application.cpp
++++ b/xbmc/Application.cpp
+@@ -94,6 +94,12 @@
+ #include "guilib/LocalizeStrings.h"
+ #include "utils/CPUInfo.h"
+ #include "utils/SeekHandler.h"
++#include "utils/StringUtils.h"
++#include "utils/SysfsUtils.h"
++
++#include <string>
++using namespace std;
++using std::string;
+ 
+ #include "input/KeyboardLayoutManager.h"
+ 
+@@ -4583,6 +4589,39 @@ void CApplication::ProcessSlow()
+   // after the screensaver start time.
+   if(!m_renderGUI)
+     ResetScreenSaverTimer();
++
++  // Set current time on the VFD display
++  int vfd = open("/sys/devices/platform/m1-vfd.0/led", O_RDWR);
++  if (vfd >= 0)
++  {
++    CDateTime time = CDateTime::GetCurrentDateTime();
++
++//    int hpd_state;
++//    std::string hpd = "EF";
++//    std::string test;
++//    if (SysfsUtils::GetString("/sys/class/amhdmitx/amhdmitx0/hpd_state", test) != 0)
++//      std::string hpd = "eF";
++//    SysfsUtils::GetInt("/sys/class/amhdmitx/amhdmitx0/hpd_state", hpd_state);
++//    if (hpd_state == 1)
++//
++//    std::string usb = "C";
++//    //if (SysfsUtils::Has("/dev/sda"))
++//    //  usb = "c";
++//    if (SysfsUtils::Has("/dev/sdb"))
++//      usb = "c";
++//    if (SysfsUtils::Has("/dev/sdc"))
++//      usb = "c";
++//    if (SysfsUtils::Has("/dev/sdd"))
++//      usb = "c";
++//
++//    std::string sd = "D";
++//    if (SysfsUtils::Has("/dev/mmcblk1p1"))
++//      sd = "d";
++
++    std::string result = StringUtils::Format("%02i:%02i", time.GetHour(), time.GetMinute()); //, hpd, usb, sd);
++    write(vfd, result.c_str(), strlen(result.c_str()));
++    close(vfd);
++  }
+ }
+ 
+ // Global Idle Time in Seconds
