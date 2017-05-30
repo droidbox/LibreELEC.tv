@@ -16,7 +16,7 @@ index f58176c..9bc5c72 100644
              self.oe.dbg_log('system::get_json', 'enter_function', 0)
              if url is None:
 -                url = self.UPDATE_DOWNLOAD_URL % ('releases', 'releases.json')
-+                url = self.UPDATE_DOWNLOAD_URL2 % ('updates', 'releases.json')
++                url = self.UPDATE_DOWNLOAD_URL2 % ('update', 'releases.json')
              if url.split('/')[-1] != 'releases.json':
                  url = url + '/releases.json'
              data = self.oe.load_url(url)

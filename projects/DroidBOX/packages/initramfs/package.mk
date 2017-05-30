@@ -49,10 +49,6 @@ post_install() {
       ln -sf /usr/lib $ROOT/$BUILD/initramfs/usr/lib64
     fi
 
-    if [ $TARGET_KERNEL_ARCH == "arm64" ] && [ $TARGET_ARCH == "arm" ]; then
-      STRIP=$ROOT/$TOOLCHAIN/lib/gcc-linaro-aarch64-linux-gnu/bin/aarch64-linux-gnu-strip
-    fi
-
     for MOD in `find ./usr/lib/modules/ -type f -name *.ko`; do
       $STRIP --strip-debug $MOD
     done
@@ -62,12 +58,7 @@ post_install() {
     ln -sf /usr/sbin $ROOT/$BUILD/initramfs/sbin
 
     mkdir -p $ROOT/$BUILD/image/
-    if [ $TARGET_ARCH == "aarch64" ]; then
-      fakeroot -- sh -c \
-        "mkdir -p dev; mknod -m 600 dev/console c 5 1; find . | cpio -H newc -ov -R 0:0 | lzop --best > $ROOT/$BUILD/image/initramfs.cpio"
-    else
-      fakeroot -- sh -c \
-        "mkdir -p dev; mknod -m 600 dev/console c 5 1; find . | cpio -H newc -ov -R 0:0 | gzip -n -9 -f > $ROOT/$BUILD/image/initramfs.cpio"
-    fi
+    fakeroot -- sh -c \
+      "mkdir -p dev; mknod -m 600 dev/console c 5 1; find . | cpio -H newc -ov -R 0:0 | gzip -n -9 -f > $ROOT/$BUILD/image/initramfs.cpio"
   )
 }

@@ -5,12 +5,19 @@ import threading
 import time
 import sys
 import subprocess
+import os.path
 
 addon = xbmcaddon.Addon(id='script.service.zvfd')
 
 class clockThreadClass(threading.Thread):
     def run(self):
 	self.shutdown = False
+	if os.path.isfile("/sys/devices/platform/m1-vfd.0/led"):
+	    vfd = file('/sys/devices/platform/m1-vfd.0/led', "wb")
+	elif os.path.isfile("/sys/devices/m1-vfd.26/led"):
+	    vfd = file('/sys/devices/m1-vfd.26/led', "wb")
+	else:
+	    vfd = file('/dev/null', "wb")
 	while not self.shutdown:
 	    spec = 0
 	    tm = xbmc.getInfoLabel('System.Time(hh:mm)')
@@ -34,7 +41,6 @@ class clockThreadClass(threading.Thread):
 	    else: hpd = "Ef"
 	    vfdset = tm + hpd + usb + sd
 	    vfdset = str(vfdset).rjust(9,'0')
-	    vfd = file('/sys/devices/m1-vfd.26/led', "wb")
 	    vfd.write(vfdset)
 	    vfd.flush()
 	    time.sleep(0.5)

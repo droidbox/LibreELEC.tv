@@ -2,18 +2,11 @@
 # setup system defaults
 ################################################################################
 
-    TARGET_CPU="cortex-a53"
-
-    case $TARGET_ARCH in
-      aarch64)
-        TARGET_CPU_FLAGS="+crc+fp+simd"
-        ;;
-      arm)
-        TARGET_CPU_FLAGS="+crc"
-        TARGET_FPU="neon-fp-armv8"
-        TARGET_FLOAT="hard"
-        ;;
-    esac
+  # Setup controls which processor should be targeted for generated code.
+    TARGET_ARCH=arm
+    TARGET_CPU="cortex-a9"
+    TARGET_FLOAT="hard"
+    TARGET_FPU="neon-fp16"
 
   # Bootloader to use (syslinux / u-boot / atv-bootloader / bcm2835-bootloader)
     BOOTLOADER="u-boot"
@@ -28,30 +21,28 @@
     UBOOT_CONFIGFILE=""
 
   # Kernel target
-    KERNEL_TARGET="Image.lzo"
-
-  # Kernel extra targets to build
-    KERNEL_UBOOT_EXTRA_TARGET="gxbb_p200_2G.dtb"
+    KERNEL_TARGET="uImage"
 
   # Build Android kernel image using mkbootimg
     BUILD_ANDROID_BOOTIMG="yes"
 
-  # Additional options to be passed to Android mkbootimg
-    ANDROID_BOOTIMG_OPTIONS="--base 0x0 --kernel_offset 0x1080000"
-
   # Additional kernel make parameters (for example to specify the u-boot loadaddress)
     KERNEL_MAKE_EXTRACMD=""
 
-  # kernel image name
-    KERNEL_NAME="kernel.img"
+  # Kernel to use. values can be:
+  # default:  default mainline kernel
+#    LINUX="amlogic-3.10"
+#  # Kernel to use. values can be:
+#  # default:  default mainline kernel
+#    LINUX="custom"
+#    KERNEL_VERSION="cff7c42"
+#    KERNEL_URL="https://github.com/drieschel/linux/archive/$KERNEL_VERSION.tar.gz"
 
   # Kernel to use. values can be:
   # default:  default mainline kernel
     LINUX="custom"
-    KERNEL_VERSION="c850c92"
-    KERNEL_URL="https://github.com/kszaq/linux-amlogic-le/archive/$KERNEL_VERSION.tar.gz"
-    KERNEL_SOURCE_DIR="linux-amlogic-le-$KERNEL_VERSION*"
-    KERNEL_PATCH_DIRS="amlogic-3.14"
+    KERNEL_VERSION="fb5b898"
+    KERNEL_URL="https://github.com/kszaq/linux/archive/$KERNEL_VERSION.tar.gz"
 
     SKINS="$SKINS Confluence"
 
@@ -79,7 +70,7 @@
     OPENGLES="opengl-meson"
 
   # Amlogic Meson SOC family (8 / 6 / gxbb)
-    MESON_FAMILY="gxbb"
+    MESON_FAMILY="8"
 
   # include uvesafb support (yes / no)
     UVESAFB_SUPPORT="no"
@@ -99,13 +90,13 @@
     KODIPLAYER_DRIVER="libamcodec"
 
   # Modules to install in initramfs for early boot
-    INITRAMFS_MODULES="dwc_otg dwc3 font softcursor bitblit fbcon aml_nftl_dev"
+    INITRAMFS_MODULES=""
 
   # additional drivers to install:
   # for a list of additinoal drivers see packages/linux-drivers
   # Space separated list is supported,
   # e.g. ADDITIONAL_DRIVERS="DRIVER1 DRIVER2"
-    ADDITIONAL_DRIVERS="RTL8192CU RTL8192DU RTL8192EU RTL8812AU gpu-aml media_build"
+    ADDITIONAL_DRIVERS="RTL8192CU RTL8192DU RTL8192EU RTL8812AU"
 
   # additional Firmware to use (dvb-firmware, misc-firmware, wlan-firmware)
   # Space separated list is supported,
@@ -115,17 +106,11 @@
   # build and install ATV IR remote support (yes / no)
     ATVCLIENT_SUPPORT="no"
 
-  # "none" for disable LCD support
-    LCD_DRIVER="none"
-
   # Amlogic IR remote support (yes / no)
     AMREMOTE_SUPPORT="yes"
 
-  # build and install iSCSI support - iscsistart (yes / no)
-    ISCSI_SUPPORT="no"
-
   # build with swap support (yes / no)
-    SWAP_SUPPORT="yes"
+    SWAP_SUPPORT="no"
 
   # swap support enabled per default (yes / no)
     SWAP_ENABLED_DEFAULT="no"
@@ -140,6 +125,9 @@
     EXTRA_DEPS="mkimage"
     EXTRA_DEPS_PKG="u-boot-tools"
 
+  # kernel image name
+    KERNEL_NAME="kernel.img"
+
   # custom addon server url
     ADDON_SERVER_URL="https://raw.github.com/surkovalex/unofficial-addons/$ADDON_VERSION"
     ADDON_PATH="Amlogic/$TARGET_ARCH"
@@ -147,4 +135,3 @@
 
   # OEM packages for OEM's (yes / no)
     OEM_SUPPORT="yes"
-
