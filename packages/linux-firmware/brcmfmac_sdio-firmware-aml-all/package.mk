@@ -18,11 +18,11 @@
 ################################################################################
 
 PKG_NAME="brcmfmac_sdio-firmware-aml-all"
-PKG_VERSION="56a523e"
+PKG_VERSION="faec7aa"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"
-PKG_SITE="https://github.com/kszaq/brcmfmac_sdio-firmware-aml"
+PKG_SITE="https://github.com/surkovalex/brcmfmac_sdio-firmware-aml"
 PKG_URL="$PKG_SITE/archive/$PKG_VERSION.tar.gz"
 PKG_SOURCE_DIR="brcmfmac_sdio-firmware-aml-$PKG_VERSION*"
 PKG_DEPENDS_TARGET="toolchain"
