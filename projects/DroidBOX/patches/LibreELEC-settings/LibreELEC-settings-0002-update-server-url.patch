@@ -26,10 +26,11 @@ diff --git a/src/oe.py b/src/oe.py
 index 6094793..565ee6f 100644
 --- a/src/oe.py
 +++ b/src/oe.py
-@@ -42,6 +42,7 @@ import dbus
+@@ -42,6 +42,8 @@ import dbus
  import dbus.mainloop.glib
  import defaults
  import shutil
++import os.path
 +import base64
  
  from xml.dom import minidom
@@ -70,7 +71,7 @@ index 6094793..565ee6f 100644
  else:
      SYSTEMID = os.environ.get('SYSTEMID', '')
  
-+if os.path.exists('/sys/class/net/eth0/address'):
++if os.path.isfile('/sys/class/net/eth0/address'):
 +    fileMac = open("/sys/class/net/eth0/address","r")
 +    rmac = fileMac.read()
 +    fileMac.close()
