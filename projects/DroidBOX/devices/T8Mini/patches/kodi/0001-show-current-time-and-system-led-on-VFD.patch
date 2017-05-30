@@ -1,18 +1,3 @@
-From 93e5741795187b4d25befa4d9de463a6131ad098 Mon Sep 17 00:00:00 2001
-From: alex <surkov.alex@gmail.com>
-Date: Wed, 3 May 2017 14:14:36 +0300
-Subject: [PATCH] show current time and system led on VFD
-
----
- xbmc/Application.cpp                | 17 +++++++++++++++++
- xbmc/XBDateTime.cpp                 | 20 ++++++++++++++++++++
- xbmc/XBDateTime.h                   |  2 ++
- xbmc/linux/PlatformDefs.h           |  1 +
- xbmc/linux/XTimeUtils.cpp           |  1 +
- xbmc/storage/linux/UDevProvider.cpp | 28 +++++++++++++++++++++++++++-
- xbmc/utils/AMLUtils.cpp             | 10 ++++++++++
- 7 files changed, 78 insertions(+), 1 deletion(-)
-
 diff --git a/xbmc/Application.cpp b/xbmc/Application.cpp
 index 947f093..7ad6b29 100644
 --- a/xbmc/Application.cpp
@@ -124,7 +109,7 @@ index 463b595..5ca1a0a 100644
    lpSystemTime->wSecond = tm_ft.tm_sec;
  
 diff --git a/xbmc/storage/linux/UDevProvider.cpp b/xbmc/storage/linux/UDevProvider.cpp
-index 6fda5a5..a6dc930 100644
+index 6fda5a5..08bd61d 100644
 --- a/xbmc/storage/linux/UDevProvider.cpp
 +++ b/xbmc/storage/linux/UDevProvider.cpp
 @@ -32,6 +32,9 @@ extern "C" {
@@ -144,7 +129,7 @@ index 6fda5a5..a6dc930 100644
 +    const char *sdc = udev_device_get_property_value(device, "ID_NAME");
      const char *optical = udev_device_get_property_value(device, "ID_CDROM"); // matches also DVD, Blu-ray
      bool isRemovable = ((bus        && strstr(bus, "usb")) ||
-+                        (sdc        && strstr(sdc, "SDC")) ||
++                        (sdc        && strlen(sdc)) ||
                          (optical    && strstr(optical,"1"))  ||
                          (mountpoint && strstr(mountpoint, "/media/")));
  
@@ -155,7 +140,7 @@ index 6fda5a5..a6dc930 100644
 +    const char *bus = udev_device_get_property_value(dev, "ID_BUS");
 +    const char *sdc = udev_device_get_property_value(dev, "ID_NAME");
 +    bool isUsb = (bus && strstr(bus, "usb"));
-+    bool isSdc = (sdc && strstr(sdc, "SDC"));
++    bool isSdc = (sdc && strlen(sdc));
 +
      const char *action  = udev_device_get_action(dev);
      if (action)
@@ -197,7 +182,7 @@ index 6fda5a5..a6dc930 100644
        // browse disk dialog is not wanted for blu-rays
        const char *bd = udev_device_get_property_value(dev, "ID_CDROM_MEDIA_BD");
 diff --git a/xbmc/utils/AMLUtils.cpp b/xbmc/utils/AMLUtils.cpp
-index cd19ec7..19cdc5f 100644
+index cd19ec7..d6c2cfe 100644
 --- a/xbmc/utils/AMLUtils.cpp
 +++ b/xbmc/utils/AMLUtils.cpp
 @@ -148,6 +148,16 @@ bool aml_permissions()
@@ -211,12 +196,9 @@ index cd19ec7..19cdc5f 100644
 +      write(vfd, result.c_str(), strlen(result.c_str()));
 +      close(vfd);
 +
-+      std::string cmd = "udevadm trigger --type=devices --action=add";
-+      system(cmd.c_str());
++      //std::string cmd = "udevadm trigger --type=devices --action=add";
++      //system(cmd.c_str());
 +    }
  #ifndef TARGET_ANDROID
      if (!SysfsUtils::HasRW("/sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq"))
      {
--- 
-1.9.1
-
