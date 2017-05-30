@@ -200,7 +200,7 @@ $SCRIPTS/install network
 [ "$TESTING" = "yes" ] && $SCRIPTS/install testing
 
 # Install gdb in all builds, including releases
-$SCRIPTS/install debug
+# $SCRIPTS/install debug
 
 # OEM packages
 [ "$OEM_SUPPORT" = "yes" ] && $SCRIPTS/install oem
@@ -376,7 +376,7 @@ if [ "$1" = "release" -o "$1" = "mkimage" -o "$1" = "amlpkg" -o "$1" = "noobs" ]
       EXTRA_CMDLINE="$EXTRA_CMDLINE" \
       SYSTEM_SIZE="$SYSTEM_SIZE" \
       SYSTEM_PART_START="$SYSTEM_PART_START" \
-      $SCRIPTS/mkimage
+      $SCRIPTS/amlimage
   fi
 
   # cleanup release dir
